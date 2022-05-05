@@ -62,6 +62,8 @@ function App() {
       <td> <Checkbox/></td>
       <td>{element.future}</td>
       <td>{element.rate}</td>
+      <td><a href={"https://www.tradingview.com/chart?symbol="+ element.future.replace('-','')} 
+      target="_blank">Chart</a></td>
     </tr>
   ));
 
@@ -108,6 +110,7 @@ function App() {
                     <th></th>
                     <th>Future</th>
                     <th>Rate</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>{showRows(longRates)}</tbody>
@@ -131,6 +134,7 @@ function App() {
                     <th></th>
                     <th>Future</th>
                     <th>Rate</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>{showRows(shortRates)}</tbody>
