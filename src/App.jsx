@@ -3,7 +3,9 @@ import { Title, Button, Container, Group, Space, Table, ScrollArea, MultiSelect,
 import './App.css'
 
 function App() {
-  const [fundingRates, setFundingRates] = useState({});
+  const [fundingRates, setFundingRates] = useState([]);
+  const [longRates, setLongRates] = useState();
+  const [shortRates, setShortRates] = useState();
   const [nonTradableCoins, setNonTradableCoins] = useState();
   const [selectedNonTradableCoins, setSelectedNonTradableCoins] = useState(
     (localStorage.getItem('coins') && JSON.parse(localStorage.getItem('coins')))  || []
@@ -50,7 +52,9 @@ function App() {
     const shortRates = finalCoins.filter(i=>i.rate >= 0).sort((a,b) =>b.rate-a.rate)
     const longRates = finalCoins.filter(i=>i.rate < 0).sort((a,b) =>a.rate-b.rate)
     
-    setFundingRates({longRates, shortRates});
+    setFundingRates(finalCoins)
+    setLongRates(longRates);
+    setShortRates(shortRates);
   };
 
   const showRows = (rates) => rates.map((element) => (
@@ -64,11 +68,16 @@ function App() {
   const addNonTradabelCoins = (coins) => {
     localStorage.setItem('coins', JSON.stringify(coins));
      //remove non tradable selected coins
-     const longRates = fundingRates.longRates.filter(i=> !coins.includes(i.future))
-     const shortRates = fundingRates.shortRates.filter(i=> !coins.includes(i.future))
-     setFundingRates({
-      longRates,
-      shortRates});
+     console.log(fundingRates);
+     setLongRates(fundingRates
+      .filter(i=> !coins.includes(i.future))
+      .filter(i=>i.rate < 0)
+      .sort((a,b) =>a.rate-b.rate))
+     setShortRates(fundingRates
+     .filter(i=> !coins.includes(i.future))
+     .filter(i=>i.rate >= 0)
+     .sort((a,b) =>b.rate-a.rate))
+     console.log(coins);
      setSelectedNonTradableCoins(coins)
   }
 
@@ -92,7 +101,7 @@ function App() {
               border: `1px solid ${theme.colors.gray[3]}`,
               borderRadius: 5
               })}>
-            {fundingRates.longRates && 
+            {longRates && 
             ( <Table striped highlightOnHover>
                 <thead>
                   <tr>
@@ -101,7 +110,7 @@ function App() {
                     <th>Rate</th>
                   </tr>
                 </thead>
-                <tbody>{showRows(fundingRates.longRates)}</tbody>
+                <tbody>{showRows(longRates)}</tbody>
               </Table>)}
             </ScrollArea>
           </Container>
@@ -115,7 +124,7 @@ function App() {
               border: `1px solid ${theme.colors.gray[3]}`,
               borderRadius: 5
               })}>
-            {fundingRates.shortRates && 
+          {shortRates && 
             (<Table striped highlightOnHover>
                 <thead>
                   <tr>
@@ -124,7 +133,7 @@ function App() {
                     <th>Rate</th>
                   </tr>
                 </thead>
-                <tbody>{showRows(fundingRates.shortRates)}</tbody>
+                <tbody>{showRows(shortRates)}</tbody>
               </Table>)}
             </ScrollArea>
           </Container>
