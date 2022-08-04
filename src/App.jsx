@@ -12,6 +12,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 function App() {
+  let timer;
   const [fundingRates, setFundingRates] = useState([]);
   const [longRates, setLongRates] = useState();
   const [shortRates, setShortRates] = useState();
@@ -26,7 +27,9 @@ function App() {
 
   useEffect(() => {
     getFundingRates();
+    setRefreshTimer();
   }, []);
+
   const getFundingRates = () => {
     fetch("https://34krsjgjzk.execute-api.us-east-1.amazonaws.com/")
       .then((res) => {
@@ -36,6 +39,17 @@ function App() {
         splitFundingRates(rates)
       });
   };
+
+  const setRefreshTimer = () => {
+    if(!timer){
+      timer = setInterval(()=> {
+        const currentMinutes = new Date().getMinutes()
+        if(currentMinutes===1) {
+          getFundingRates();
+        }
+      }, 30000)
+    }
+  }
 
   const splitFundingRates = ({result}) => {
     
@@ -108,12 +122,11 @@ function App() {
       <Group position="apart" mb="sm">
         <Title order={1}  sx={(theme) => ({
             color: theme.colors.gray[7]
-            })}>CSI Funding Rates (FTX)</Title>
-        <Button onClick={()=>getFundingRates()}>Reload</Button>
+            })}>CSI Funding Rates</Title>
       </Group>
       <Space h="md" />
       <Tabs>
-        <Tabs.Tab label="Top 100">
+        <Tabs.Tab label="Top 100 (FTX)">
         <Container p={0} mr="xl">
               <ScrollArea  sx={(theme) => ({
                 border: `1px solid ${theme.colors.gray[3]}`,
