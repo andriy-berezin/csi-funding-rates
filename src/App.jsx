@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { createStyles, Title, Button, Container, Group, Space, Table, ScrollArea, MultiSelect, Checkbox, Tabs } from '@mantine/core';
+import { createStyles, Title, Text, Button, Container, Group, Space, Table, ScrollArea, MultiSelect, Checkbox, Tabs } from '@mantine/core';
 import './App.css'
 
 const useStyles = createStyles((theme) => ({
@@ -70,14 +70,17 @@ function App() {
     setTopRates(topRates)
   };
 
-  const showRows = (rates, top = false) => rates.map((element) => (
+  const showRows = (rates, top = false) => rates.map((element, index) => (
     <tr key={element.future}>
-      <td> <Checkbox/></td>
+      <td style={{width:'10px'}}><Text>{index+1}</Text></td>
+      <td>
+        <Checkbox/>
+      </td>
       <td>{element.future}</td>
       <td 
        className={ top ? element.rate>0 ? classes.redText : classes.greenText : ''}
       >{element.rate}</td>
-      <td><a href={"https://www.tradingview.com/chart?symbol="+ element.future.replace('-','')} 
+      <td><a href={"https://www.tradingview.com/chart?symbol=FTX:"+ element.future.replace('-','')} 
       target="_blank">Chart</a></td>
     </tr>
   ));
@@ -110,6 +113,28 @@ function App() {
       </Group>
       <Space h="md" />
       <Tabs>
+        <Tabs.Tab label="Top 100">
+        <Container p={0} mr="xl">
+              <ScrollArea  sx={(theme) => ({
+                border: `1px solid ${theme.colors.gray[3]}`,
+                borderRadius: 5
+                })}>
+              {topRates && 
+              ( <Table striped highlightOnHover>
+                  <thead>
+                    <tr>
+                      <th style={{width:'10px'}}></th>
+                      <th></th>
+                      <th>Future</th>
+                      <th>Rate</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>{showRows(topRates, true)}</tbody>
+                </Table>)}
+              </ScrollArea>
+            </Container>
+        </Tabs.Tab>
         <Tabs.Tab label="All Coins">
         <Group spacing="xl" grow align="top">
             <Container p={0} mr="xl">
@@ -162,27 +187,7 @@ function App() {
             </Container>
         </Group>
         </Tabs.Tab>
-        <Tabs.Tab label="Top 100">
-        <Container p={0} mr="xl">
-              <ScrollArea  sx={(theme) => ({
-                border: `1px solid ${theme.colors.gray[3]}`,
-                borderRadius: 5
-                })}>
-              {topRates && 
-              ( <Table striped highlightOnHover>
-                  <thead>
-                    <tr>
-                      <th></th>
-                      <th>Future</th>
-                      <th>Rate</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>{showRows(topRates, true)}</tbody>
-                </Table>)}
-              </ScrollArea>
-            </Container>
-        </Tabs.Tab>
+       
       </Tabs>
       <Space h="xl" />
       {nonTradableCoins && 
