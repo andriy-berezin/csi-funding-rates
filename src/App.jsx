@@ -12,7 +12,6 @@ const useStyles = createStyles((theme) => ({
 }));
 
 function App() {
-  let timer;
   const [fundingRates, setFundingRates] = useState([]);
   const [longRates, setLongRates] = useState();
   const [shortRates, setShortRates] = useState();
@@ -21,13 +20,15 @@ function App() {
   const [selectedNonTradableCoins, setSelectedNonTradableCoins] = useState(
     (localStorage.getItem('coins') && JSON.parse(localStorage.getItem('coins')))  || []
   );
-  const topCoins = ['BTC-PERP', 'ETH-PERP', 'USDT-PERP', 'USDC-PERP', 'BNB-PERP', 'BUSD-PERP', 'XRP-PERP', 'ADA-PERP', 'SOL-PERP', 'DOGE-PERP', 'DOT-PERP', 'MATIC-PERP', 'DAI-PERP', 'AVAX-PERP', 'UNI-PERP', 'SHIB-PERP', 'TRX-PERP', 'WBTC-PERP', 'ETC-PERP', 'LEO-PERP', 'LTC-PERP', 'FTT-PERP', 'LINK-PERP', 'CRO-PERP', 'NEAR-PERP', 'ATOM-PERP', 'XLM-PERP', 'XMR-PERP', 'BCH-PERP', 'ALGO-PERP', 'APE-PERP', 'VET-PERP', 'FLOW-PERP', 'MANA-PERP', 'ICP-PERP', 'SAND-PERP', 'XTZ-PERP', 'HBAR-PERP', 'AXS-PERP', 'FIL-PERP', 'THETA-PERP', 'AAVE-PERP', 'QNT-PERP', 'EOS-PERP', 'EGLD-PERP', 'BSV-PERP', 'TUSD-PERP', 'HNT-PERP', 'MKR-PERP', 'OKB-PERP', 'KCS-PERP', 'ZEC-PERP', 'USDP-PERP', 'BTT-PERP', 'KLAY-PERP', 'RUNE-PERP', 'GRT-PERP', 'MIOTA-PERP', 'XEC-PERP', 'FTM-PERP', 'NEO-PERP', 'CHZ-PERP', 'LDO-PERP', 'CRV-PERP', 'USDN-PERP', 'USDD-PERP', 'HT-PERP', 'WAVES-PERP', 'BAT-PERP', 'PAXG-PERP', 'CAKE-PERP', 'BTG-PERP', 'GMT-PERP', 'STX-PERP', 'LRC-PERP', 'ZIL-PERP', 'DASH-PERP', 'ENJ-PERP', 'KSM-PERP', 'CVX-PERP', 'QTUM-PERP', 'MINA-PERP', 'SNX-PERP', 'XEM-PERP', 'AR-PERP', 'KAVA-PERP', 'CELO-PERP', '1INCH-PERP', 'GNO-PERP', 'FEI-PERP', 'COMP-PERP', 'TWT-PERP', 'RVN-PERP', 'ROSE-PERP', 'NEXO-PERP', 'DCR-PERP', 'GALA-PERP', 'HOT-PERP', 'OP-PERP', 'AMP-PERP']
+
+  // data.data.cryptoCurrencyList.map(c=>c.symbol+"-PERP")
+  const topCoins = ['BTC-PERP', 'ETH-PERP', 'USDT-PERP', 'USDC-PERP', 'BNB-PERP', 'BUSD-PERP', 'XRP-PERP', 'ADA-PERP', 'SOL-PERP', 'DOGE-PERP', 'DOT-PERP', 'DAI-PERP', 'MATIC-PERP', 'SHIB-PERP', 'TRX-PERP', 'AVAX-PERP', 'WBTC-PERP', 'LEO-PERP', 'UNI-PERP', 'ETC-PERP', 'LTC-PERP', 'FTT-PERP', 'LINK-PERP', 'ATOM-PERP', 'CRO-PERP', 'NEAR-PERP', 'XLM-PERP', 'XMR-PERP', 'BCH-PERP', 'ALGO-PERP', 'FLOW-PERP', 'VET-PERP', 'ICP-PERP', 'FIL-PERP', 'EOS-PERP', 'APE-PERP', 'MANA-PERP', 'SAND-PERP', 'HBAR-PERP', 'XTZ-PERP', 'CHZ-PERP', 'EGLD-PERP', 'QNT-PERP', 'AXS-PERP', 'AAVE-PERP', 'THETA-PERP', 'TUSD-PERP', 'BSV-PERP', 'OKB-PERP', 'USDP-PERP', 'ZEC-PERP', 'KCS-PERP', 'BTT-PERP', 'MIOTA-PERP', 'HT-PERP', 'MKR-PERP', 'HNT-PERP', 'USDD-PERP', 'KLAY-PERP', 'GRT-PERP', 'XEC-PERP', 'FTM-PERP', 'USDN-PERP', 'SNX-PERP', 'RUNE-PERP', 'NEO-PERP', 'PAXG-PERP', 'CRV-PERP', 'CAKE-PERP', 'NEXO-PERP', 'LDO-PERP', 'BAT-PERP', 'WAVES-PERP', 'DASH-PERP', 'ZIL-PERP', 'STX-PERP', 'LRC-PERP', 'ENJ-PERP', 'MINA-PERP', 'FEI-PERP', 'KAVA-PERP', 'GMT-PERP', 'BTG-PERP', 'XEM-PERP', 'DCR-PERP', 'TWT-PERP', 'GNO-PERP', 'KSM-PERP', '1INCH-PERP', 'CELO-PERP', 'AR-PERP', 'HOT-PERP', 'GALA-PERP', 'ANKR-PERP', 'XDC-PERP', 'CVX-PERP', 'GT-PERP', 'COMP-PERP', 'TFUEL-PERP', 'QTUM-PERP']
   
   const { classes } = useStyles(); 
 
   useEffect(() => {
     getFundingRates();
-    setRefreshTimer();
+    getKuCoinSymbols()
   }, []);
 
   const getFundingRates = () => {
@@ -40,15 +41,14 @@ function App() {
       });
   };
 
-  const setRefreshTimer = () => {
-    if(!timer){
-      timer = setInterval(()=> {
-        const currentMinutes = new Date().getMinutes()
-        if(currentMinutes===1) {
-          getFundingRates();
-        }
-      }, 30000)
-    }
+  const getKuCoinSymbols = () => {
+    fetch("https://api-futures.kucoin.com/api/v1/contracts/active")
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      }); 
   }
 
   const splitFundingRates = ({result}) => {
@@ -126,7 +126,7 @@ function App() {
       </Group>
       <Space h="md" />
       <Tabs>
-        <Tabs.Tab label="Top 100 (FTX)">
+        <Tabs.Tab label="Top 100">
         <Container p={0} mr="xl">
               <ScrollArea  sx={(theme) => ({
                 border: `1px solid ${theme.colors.gray[3]}`,
