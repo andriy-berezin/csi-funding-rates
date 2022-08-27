@@ -28,7 +28,7 @@ function App() {
 
   useEffect(() => {
     getFundingRates();
-    getKuCoinSymbols()
+    //getKuCoinSymbols()
   }, []);
 
   const getFundingRates = () => {
@@ -123,6 +123,7 @@ function App() {
         <Title order={1}  sx={(theme) => ({
             color: theme.colors.gray[7]
             })}>CSI Funding Rates</Title>
+            <Button onClick={()=>getFundingRates()}>Reload</Button>
       </Group>
       <Space h="md" />
       <Tabs>
